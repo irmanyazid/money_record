@@ -20,7 +20,108 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: const Drawer(),
+      endDrawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+              margin: const EdgeInsets.only(bottom: 0),
+              padding: const EdgeInsets.fromLTRB(20, 16, 16, 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Image.asset(AppAsset.profile),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Obx(
+                              () {
+                                return Text(
+                                  cUser.data.name ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              },
+                            ),
+                            Obx(
+                              () {
+                                return Text(
+                                  cUser.data.email ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Material(
+                    color: AppColor.primary,
+                    borderRadius: BorderRadius.circular(30),
+                    child: InkWell(
+                      onTap: () {
+                        Session.clearUser();
+                        Get.off(() => const LoginPage());
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 8,
+                        ),
+                        child: Text(
+                          'Logout',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              onTap: () {},
+              leading: const Icon(Icons.add),
+              horizontalTitleGap: 0,
+              title: const Text('Tambah Baru'),
+              trailing: const Icon(Icons.navigate_next),
+            ),
+            ListTile(
+              onTap: () {},
+              leading: const Icon(Icons.south_west),
+              horizontalTitleGap: 0,
+              title: const Text('Pemasukan'),
+              trailing: const Icon(Icons.navigate_next),
+            ),
+            ListTile(
+              onTap: () {},
+              leading: const Icon(Icons.north_east),
+              horizontalTitleGap: 0,
+              title: const Text('Pengeluaran'),
+              trailing: const Icon(Icons.navigate_next),
+            ),
+            ListTile(
+              onTap: () {},
+              leading: const Icon(Icons.history),
+              horizontalTitleGap: 0,
+              title: const Text('Riwayat'),
+              trailing: const Icon(Icons.navigate_next),
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Padding(
@@ -39,36 +140,40 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Obx(() {
-                        return Text(
-                          cUser.data.name ?? '',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        );
-                      }),
+                      Obx(
+                        () {
+                          return Text(
+                            cUser.data.name ?? '',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
-                Builder(builder: (ctx) {
-                  return Material(
-                    borderRadius: BorderRadius.circular(4),
-                    color: AppColor.chart,
-                    child: InkWell(
-                      onTap: () {
-                        Scaffold.of(ctx).openEndDrawer();
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Icon(
-                          Icons.menu,
-                          color: AppColor.primary,
+                Builder(
+                  builder: (ctx) {
+                    return Material(
+                      borderRadius: BorderRadius.circular(4),
+                      color: AppColor.chart,
+                      child: InkWell(
+                        onTap: () {
+                          Scaffold.of(ctx).openEndDrawer();
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Icon(
+                            Icons.menu,
+                            color: AppColor.primary,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -102,33 +207,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                 ),
                 DView.spaceHeight(),
-                AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: DChartBar(
-                    data: const [
-                      {
-                        'id': 'Bar',
-                        'data': [
-                          {'domain': '2020', 'measure': 3},
-                          {'domain': '2021', 'measure': 4},
-                          {'domain': '2022', 'measure': 6},
-                          {'domain': '2023', 'measure': 0.3},
-                          {'domain': '2024', 'measure': 0.5},
-                          {'domain': '2025', 'measure': 0.9},
-                          {'domain': '2026', 'measure': 1},
-                        ],
-                      },
-                    ],
-                    domainLabelPaddingToAxisLine: 16,
-                    axisLineTick: 2,
-                    axisLinePointTick: 2,
-                    axisLinePointWidth: 10,
-                    axisLineColor: Colors.green,
-                    measureLabelPaddingToAxisLine: 16,
-                    barColor: (barData, index, id) => Colors.green,
-                    showBarValue: true,
-                  ),
-                ),
+                weekly(),
                 DView.spaceHeight(30),
                 Text(
                   'Perbandingan Bulan Ini',
@@ -136,84 +215,116 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: MediaQuery.of(context).size.width * 0.5,
-                      child: Stack(
-                        children: [
-                          DChartPie(
-                            data: const [
-                              {'domain': 'Flutter', 'measure': 28},
-                              {'domain': 'React Native', 'measure': 27},
-                            ],
-                            fillColor: (pieData, index) => Colors.purple,
-                            donutWidth: 30,
-                            labelColor: Colors.white,
-                          ),
-                          Center(
-                            child: Text(
-                              '60%',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4!
-                                  .copyWith(
-                                    color: AppColor.primary,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              height: 16,
-                              width: 16,
-                              color: AppColor.primary,
-                            ),
-                            DView.spaceWidth(8),
-                            const Text('Pemasukan'),
-                          ],
-                        ),
-                        DView.spaceHeight(8),
-                        Row(
-                          children: [
-                            Container(
-                              height: 16,
-                              width: 16,
-                              color: AppColor.chart,
-                            ),
-                            DView.spaceWidth(8),
-                            const Text('Pengeluaran'),
-                          ],
-                        ),
-                        DView.spaceHeight(20),
-                        const Text('Pemasukan'),
-                        const Text('lebih besar 20%'),
-                        const Text('dari pengeluaran'),
-                        DView.spaceHeight(10),
-                        const Text('Atau setara'),
-                        const Text(
-                          'Rp 20,000.00',
-                          style: TextStyle(
-                            color: AppColor.primary,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                DView.spaceHeight(),
+                monthly(context),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Row monthly(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: MediaQuery.of(context).size.width * 0.5,
+          child: Stack(
+            children: [
+              DChartPie(
+                data: const [
+                  {'domain': 'Flutter', 'measure': 28},
+                  {'domain': 'React Native', 'measure': 27},
+                ],
+                fillColor: (pieData, index) => Colors.purple,
+                donutWidth: 30,
+                labelColor: Colors.white,
+              ),
+              Center(
+                child: Text(
+                  '60%',
+                  style: Theme.of(context).textTheme.headline4!.copyWith(
+                        color: AppColor.primary,
+                      ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  height: 16,
+                  width: 16,
+                  color: AppColor.primary,
+                ),
+                DView.spaceWidth(8),
+                const Text('Pemasukan'),
+              ],
+            ),
+            DView.spaceHeight(8),
+            Row(
+              children: [
+                Container(
+                  height: 16,
+                  width: 16,
+                  color: AppColor.chart,
+                ),
+                DView.spaceWidth(8),
+                const Text('Pengeluaran'),
+              ],
+            ),
+            DView.spaceHeight(20),
+            const Text('Pemasukan'),
+            const Text('lebih besar 20%'),
+            const Text('dari pengeluaran'),
+            DView.spaceHeight(10),
+            const Text('Atau setara'),
+            const Text(
+              'Rp 20,000.00',
+              style: TextStyle(
+                color: AppColor.primary,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  AspectRatio weekly() {
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: DChartBar(
+        data: const [
+          {
+            'id': 'Bar',
+            'data': [
+              {'domain': '2020', 'measure': 3},
+              {'domain': '2021', 'measure': 4},
+              {'domain': '2022', 'measure': 6},
+              {'domain': '2023', 'measure': 0.3},
+              {'domain': '2024', 'measure': 0.5},
+              {'domain': '2025', 'measure': 0.9},
+              {'domain': '2026', 'measure': 1},
+            ],
+          },
+        ],
+        domainLabelPaddingToAxisLine: 16,
+        axisLineTick: 2,
+        axisLinePointTick: 2,
+        axisLinePointWidth: 10,
+        axisLineColor: Colors.green,
+        measureLabelPaddingToAxisLine: 16,
+        barColor: (barData, index, id) => Colors.green,
+        showBarValue: true,
       ),
     );
   }
