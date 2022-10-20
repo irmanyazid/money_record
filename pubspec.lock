@@ -71,6 +71,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.9"
+  d_input:
+    dependency: "direct main"
+    description:
+      name: d_input
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.6"
   d_method:
     dependency: "direct main"
     description:
