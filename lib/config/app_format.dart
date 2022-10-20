@@ -6,4 +6,12 @@ class AppFormat {
     DateTime dateTime = DateTime.parse(stringDate);
     return DateFormat('dd MMM yyyy', 'id_ID').format(dateTime); //05 Feb 2022
   }
+
+  static String currency(String number) {
+    return NumberFormat.currency(
+      decimalDigits: 2,
+      locale: 'id_ID',
+      symbol: 'Rp ',
+    ).format(double.parse(number));
+  }
 }
