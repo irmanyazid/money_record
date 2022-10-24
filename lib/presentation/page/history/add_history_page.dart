@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:d_input/d_input.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
@@ -5,16 +7,34 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_record/config/app_color.dart';
 import 'package:money_record/config/app_format.dart';
+import 'package:money_record/data/source/source_history.dart';
+import 'package:money_record/presentation/controller/c_user.dart';
 import 'package:money_record/presentation/controller/history/c_add_history.dart';
 
 class AddHistoryPage extends StatelessWidget {
-  const AddHistoryPage({super.key});
+  AddHistoryPage({super.key});
+  final cAddHistory = Get.put(CAddHistory());
+  final cUser = Get.put(CUser());
+  final controllerName = TextEditingController();
+  final controllerPrice = TextEditingController();
+
+  addHistory() async {
+    bool success = await SourceHistory.add(
+      cUser.data.idUser!,
+      cAddHistory.date,
+      cAddHistory.type,
+      jsonEncode(cAddHistory.items),
+      cAddHistory.total.toString(),
+    );
+    if (success) {
+      Future.delayed(const Duration(milliseconds: 3000), () {
+        Get.back(result: true);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final cAddHistory = Get.put(CAddHistory());
-    final controllerName = TextEditingController();
-    final controllerPrice = TextEditingController();
     return Scaffold(
       appBar: DView.appBarLeft('Tambah Baru'),
       body: ListView(
@@ -158,7 +178,7 @@ class AddHistoryPage extends StatelessWidget {
             color: AppColor.primary,
             borderRadius: BorderRadius.circular(8),
             child: InkWell(
-              onTap: () {},
+              onTap: () => addHistory(),
               borderRadius: BorderRadius.circular(8),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),

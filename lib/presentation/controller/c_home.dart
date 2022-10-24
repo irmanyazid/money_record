@@ -57,7 +57,7 @@ class CHome extends GetxController {
             ? '+${percent.toStringAsFixed(1)}% di banding kemarin'
             : '-${percent.toStringAsFixed(1)}% di banding kemarin';
 
-    // _week.value = data['yesterday'].map((e) => e.toDouble()).toList();
+    _week.value = List.castFrom(data['week'].map((e) => e.toDouble()).toList());
 
     _monthIncome.value = data['month']['income'].toDouble();
     _monthOutcome.value = data['month']['outcome'].toDouble();
