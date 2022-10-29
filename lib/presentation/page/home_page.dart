@@ -10,6 +10,7 @@ import 'package:money_record/presentation/controller/c_home.dart';
 import 'package:money_record/presentation/controller/c_user.dart';
 import 'package:money_record/presentation/page/auth/login_page.dart';
 import 'package:money_record/presentation/page/history/add_history_page.dart';
+import 'package:money_record/presentation/page/history/income_outcome_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -87,46 +88,51 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-              children: [
-                Text(
-                  'Pengeluaran Hari Ini',
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                DView.spaceHeight(),
-                cardToday(context),
-                DView.spaceHeight(30),
-                Center(
-                  child: Container(
-                    height: 5,
-                    width: 80,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: AppColor.bg),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                cHome.getAnalysis(cUser.data.idUser!);
+              },
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+                children: [
+                  Text(
+                    'Pengeluaran Hari Ini',
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
-                ),
-                DView.spaceHeight(30),
-                Text(
-                  'Pengeluaran Minggu Ini',
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                DView.spaceHeight(),
-                weekly(),
-                DView.spaceHeight(30),
-                Text(
-                  'Perbandingan Bulan Ini',
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                DView.spaceHeight(),
-                monthly(context),
-              ],
+                  DView.spaceHeight(),
+                  cardToday(context),
+                  DView.spaceHeight(30),
+                  Center(
+                    child: Container(
+                      height: 5,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: AppColor.bg),
+                    ),
+                  ),
+                  DView.spaceHeight(30),
+                  Text(
+                    'Pengeluaran Minggu Ini',
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  DView.spaceHeight(),
+                  weekly(),
+                  DView.spaceHeight(30),
+                  Text(
+                    'Perbandingan Bulan Ini',
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  DView.spaceHeight(),
+                  monthly(context),
+                ],
+              ),
             ),
           ),
         ],
@@ -208,7 +214,7 @@ class _HomePageState extends State<HomePage> {
           ),
           ListTile(
             onTap: () {
-              Get.to(() => const AddHistoryPage())?.then((value) {
+              Get.to(() => AddHistoryPage())?.then((value) {
                 if (value ?? false) {
                   cHome.getAnalysis(cUser.data.idUser!);
                 }
@@ -219,20 +225,31 @@ class _HomePageState extends State<HomePage> {
             title: const Text('Tambah Baru'),
             trailing: const Icon(Icons.navigate_next),
           ),
+          const Divider(height: 1),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Get.to(() => const IncomeOutcomePage(
+                    type: 'Pemasukan',
+                  ));
+            },
             leading: const Icon(Icons.south_west),
             horizontalTitleGap: 0,
             title: const Text('Pemasukan'),
             trailing: const Icon(Icons.navigate_next),
           ),
+          const Divider(height: 1),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Get.to(() => const IncomeOutcomePage(
+                    type: 'Pengeluaran',
+                  ));
+            },
             leading: const Icon(Icons.north_east),
             horizontalTitleGap: 0,
             title: const Text('Pengeluaran'),
             trailing: const Icon(Icons.navigate_next),
           ),
+          const Divider(height: 1),
           ListTile(
             onTap: () {},
             leading: const Icon(Icons.history),
