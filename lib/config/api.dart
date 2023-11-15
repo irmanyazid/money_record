@@ -4,8 +4,9 @@ class Api {
   // static const baseUrl = 'http://192.168.100.226/api_money_record'; //ipconfig HQ
   // static const baseurl = 'http://10.224.3.28/api_money_record'; //ipconfig coffee studee
 
-  static const baseUrl =
-      'http://192.168.100.226/api_money_record'; //ipconfig HQ
+  // static const baseUrl = 'http://192.168.100.226/api_money_record'; //ipconfig HQ
+
+  static const baseUrl = 'http://10.240.252.165/api_money_record';
 
   static const history = '$baseUrl/history';
   static const user = '$baseUrl/user';

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:d_chart/d_chart.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
@@ -425,9 +427,9 @@ class _HomePageState extends State<HomePage> {
                 bottomLeft: Radius.circular(8),
               ),
             ),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: const [
+              children: [
                 Text(
                   'Selengkapnya',
                   style: TextStyle(
